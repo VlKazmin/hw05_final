@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load user_filters %}
+{% block title %}{{ post.text | truncatewords:30 }}{% endblock %}
+{% block content %}
+    <div class="container py-5">
+        <div class="row">
+            <aside class="col-12 col-md-3">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        Дата публикации:
+                        <br>
+                        {{ post.created|date:"d E Y" }}
+                    </li>
+                    {% if post.group %}
+                        <li class="list-group-item">
+                            Группа: {{ post.group }}
+                            <br>
+                            <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+                        </li>
+                    {% endif %}
+                    <li class="list-group-item">Автор: {{ post.author.get_full_name }}</li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Всего постов автора:  {{ posts_count }}
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'posts:profile' post.author %}">все посты пользователя</a>
+                    </li>
+                    {% if request.user == post.author %}
+                        <div style="width: 200px;">
+                            <div style="height: 10px; margin: 10px;"></div>
+                            <a href="{% url 'posts:post_edit' post.pk %}" class="btn btn-primary">редактировать запись</a>
+                        </div>
+                    {% endif %}
+                </ul>
+            </aside>
+            <article class="col-12 col-md-9">
+                {% thumbnail post.image "460x339" crop="center" as im %}
+                <img class="card-img my-2"
+                     src="{{ im.url }}"
+                     width="{{ im.width }}"
+                     height="{{ im.height }}">
+            {% endthumbnail %}
+            {% autoescape off %}
+                <div style="height: 24px;"></div>
+                <p>{{ post.text | linebreaksbr }}</p>
+                <hr>
+            {% endautoescape %}
+            {% if user.is_authenticated %}
+                <div style="height: 40px;"></div>
+                {% include 'posts/includes/comments.html' %}
+            {% endif %}
+        {% endblock %}

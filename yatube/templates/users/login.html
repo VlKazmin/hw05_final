@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load user_filters %}
+{% load cache %}
+
+{% block title %}Войти{% endblock %}
+{% block content %}
+    {% with card_header='Войти на сайт' %}
+        {% include 'users/includes/card.html' %}
+    {% endwith %}
+    {% include 'users/includes/error_form.html' %}
+    <form method="post"
+          {% if action_url %} action="{% url action_url %}" {% endif %}>
+        {% csrf_token %}
+        {% include 'users/includes/form.html' %}
+        <div class="col-md-6 offset-md-4">
+            <button type="submit" class="btn btn-primary">Войти</button>
+            <a href="{% url 'password_reset' %}" class="btn btn-link">Забыли пароль?</a>
+        </div>
+    </form>
+{% endblock %}

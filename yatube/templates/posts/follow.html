@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Cтраница пользователя {{ user.username }}{% endblock %}
+{% block content %}
+{% include 'posts/includes/switcher.html' %}
+<div class="container">
+  <h1>Последние обновления от авторов</h1>
+  {% for post in page_obj %}
+    {% include 'posts/includes/post_list.html' %}
+  {% endfor %}
+  {% include 'includes/paginator.html' %}
+{% endblock %}

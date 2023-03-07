@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load user_filters %}
+{% block title %}Зарегистрироваться{% endblock %}
+{% block content %}
+    {% with card_header='Зарегистрироваться' %}
+        {% include 'users/includes/card.html' %}
+        {% endwith %}
+        {% include 'users/includes/error_form.html' %}
+        <form method="post" action="{% url 'users:signup' %}">
+            {% csrf_token %}
+            {% include 'users/includes/form.html' %}
+            <div class="col-md-6 offset-md-4">
+                <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+            </div>
+        </form>
+    {% endblock %}
