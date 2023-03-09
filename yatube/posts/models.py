@@ -64,7 +64,7 @@ class Comment(CreatedModel):
     text = models.TextField("Текст", help_text="Текст нового комментария")
 
     class Meta:
-        ordering = ("-created",)
+        ordering = ("created",)
 
     def __str__(self):
         return self.text
