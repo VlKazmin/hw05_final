@@ -139,3 +139,15 @@ def profile_unfollow(request, username):
     author = get_object_or_404(User, username=username)
     Follow.objects.filter(user=request.user, author=author).delete()
     return redirect("posts:profile", username=username)
+
+
+@login_required
+def delete_message(request, post_id):
+    message = get_object_or_404(Post, pk=post_id, author=request.user)
+    template = "delete_message.html"
+
+    if request.method == "POST":
+        message.delete()
+        return redirect('posts:index')
+
+    return render(request, template)

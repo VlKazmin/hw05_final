@@ -47,9 +47,10 @@ class FollowAdmin(admin.ModelAdmin):
         'pk',
         'author',
         'user',
+        'created',
     )
 
-    list_editable = ('author',)
+    list_editable = ('author', "user",)
     list_filter = ('author',)
     list_per_page = 10
     search_fields = ('author',)
