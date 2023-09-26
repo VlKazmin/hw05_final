@@ -9,7 +9,7 @@ PAGINATE_BY: int = 10
 
 
 def index(request):
-    posts = Post.objects.all()
+    posts = Post.objects.select_related("author", "group").all()
     template = "posts/index.html"
     context = {"page_obj": paginate(request, posts, PAGINATE_BY)}
     return render(request, template, context)
@@ -17,7 +17,8 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = Post.objects.filter(group=group)
+    # posts = Post.objects.filter(group=group)
+    posts = Post.objects.select_related("author", "group").filter(group=group)
     template = "posts/group_list.html"
     context = {
         "group": group,
@@ -29,10 +30,13 @@ def group_posts(request, slug):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    user_posts = Post.objects.filter(author=author)
-    following = request.user.is_authenticated
-    if following:
-        following = request.user.follower.filter(author=author).exists()
+    user_posts = Post.objects.select_related("author", "group").filter(
+        author=author
+    )
+    following = (
+        request.user.is_authenticated
+        and request.user.follower.filter(author=author).exists()
+    )
     template = "posts/profile.html"
     context = {
         "author": author,
@@ -48,7 +52,7 @@ def post_detail(request, post_id):
         author__username=post.author.username
     ).count()
     form = CommentForm()
-    comments = post.comments.all()
+    comments = post.comments.select_related("author").all()
     template = "posts/post_detail.html"
     context = {
         "post": post,
@@ -148,6 +152,6 @@ def delete_message(request, post_id):
 
     if request.method == "POST":
         message.delete()
-        return redirect('posts:index')
+        return redirect("posts:index")
 
     return render(request, template)
