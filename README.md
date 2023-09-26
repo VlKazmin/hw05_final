@@ -19,18 +19,13 @@
 
 1. Клонируйте репозиторий и перейдите в него в командной строке:
 ```bash
-    git clone <HTTPS or SSH>
-```
-```bash
-    cd yatube
+    git clone git@github.com:VlKazmin/api_final_yatube.git
 ```
 
 2. Установите и активируйте виртуальное окружение
 ```bash
     python -m venv venv
-``` 
-```bash
-    source . venv/bin/activate
+    . venv/bin/activate
 ```
 
 3. Установите зависимости из файла requirements.txt
@@ -40,6 +35,7 @@
 
 4. В папке с файлом manage.py выполните миграции:
 ```bash
+    cd yatube
     python manage.py migrate
 ```
 
